@@ -1,0 +1,51 @@
+
+/* global.css */
+@font-face {
+    font-family: 'Hack';
+    src: url('fonts/Hack-Bold.ttf') format('truetype');
+}
+
+html, body {
+    background-color: #0A1E24;
+    color: #ECEFC1;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Hack', monospace;
+}
+
+body {
+    padding: 32px;
+}
+
+a {
+    color: #67A0CD;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin: 8px 0;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.navigation {
+    display: flex;
+    margin-bottom: 16px;
+}
+.navigation > * {
+    padding-right: 16px;
+}
+
+.directory {
+    cursor: pointer;
+    color: #0E548B
+}
+
+.directory:hover {
+    text-decoration: underline;
+}

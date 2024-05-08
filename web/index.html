@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kacper Website</title>
+        <link rel="stylesheet" href="global.css">
+        <style>
+            .social-links { display: none; }
+            .social-links > * { padding-right: 32px }
+        </style>
+        <script src="config.js"></script>
+
+    </head>
+    <body>
+        <p><a href="pages/face.html">face</a></p>
+        <p><a href="pages/bio.html">bio</a></p>
+        <p><a href="pages/experience.html">experience</a></p>
+        <p><a href="pages/cv.html">cv</a></p>
+        <p id="socialToggle" class="directory">socials</p>
+        <div id="socialLinks" class="social-links">
+            <p id="instagramLink">instagram</p>
+            <p id="linkedinLink">linkedin</p>
+            <p id="lichessLink">lichess</p>
+            <p id="githubLink">lichess</p>
+        </div>
+        <p style="position:absolute;bottom:32px;left:32px;">krekosiewicz.consultant@gmail.com</p>
+
+
+        <script>
+            document.getElementById('instagramLink').innerHTML = `<a href="${config.instagramUrl}">instagram</a>`;
+            document.getElementById('linkedinLink').innerHTML = `<a href="${config.linkedinUrl}">linkedin</a>`;
+            document.getElementById('lichessLink').innerHTML = `<a href="${config.lichessUrl}">lichess</a>`;
+            document.getElementById('githubLink').innerHTML = `<a href="${config.githubUrl}">github</a>`;
+        </script>
+        <script>
+            document.getElementById('socialToggle').onclick = function() {
+                var socialLinks = document.getElementById('socialLinks');
+                if (socialLinks.style.display === 'flex') {
+                    socialLinks.style.display = 'none';
+                } else {
+                    socialLinks.style.display = 'flex';
+                }
+            };
+        </script>
+    </body>
+</html>
