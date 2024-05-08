@@ -5,23 +5,51 @@
     <title>Experience</title>
     <link rel="stylesheet" href="../global.css">
     <style>
-        .paver-details, .pizzerman-details, .barista-details, .developer-details {
+        .navigation > * {
+            padding-right: 32px;
+        }
+        .details {
             display: none;
         }
     </style>
     <script src="../scripts/toggle.js"></script>
-
+<!--#06AFC7-->
 </head>
-<body>
-<p style="margin-bottom:16px;"><a href="../">back</a></p>
-<div class="navigation">
-    <p id="togglePaver" class="directory" style="padding-right:32px;">paver</p>
-    <p id="togglePizzerman" class="directory" style="padding-right:32px;">pizzerman</p>
-    <p id="toggleBarista" class="directory" style="padding-right:32px;">barista</p>
-    <p id="toggleDeveloper" class="directory" style="padding-right:32px;">software develeper</p>
-</div>
-<p id="paverDetails" class="paver-details">Paver-Fibra</p>
-<p id="pizzermanDetails" class="pizzerman-details">20222</p>
+<body style="display:flex;flex-direction: column">
+    <div style="flex-basis:40%">
+        <p style="margin-bottom:16px;"><a href="../">back</a></p>
+        <div class="navigation">
+            <p id="togglePaver" class="directory" style="padding-right:32px;">paver</p>
+            <p id="togglePizzerman" class="directory" style="padding-right:32px;">pizzerman</p>
+            <p id="toggleBarista" class="directory" style="padding-right:32px;">barista</p>
+            <p id="toggleDeveloper" class="directory" style="padding-right:32px;">software develeper</p>
+        </div>
+        <p id="paverDetails" class="details">Fibra_HelperOfPaver_2009-2010(summer)</p>
+        <p id="pizzermanDetails" class="details">PiekielnyKupiec_YoungerPizzerman_2010-2011(summer)</p>
+        <div id="baristaDetails" class="navigation details" >
+            <p>CoffeeHeaven</p>
+            <p>WBieguCafe</p>
+            <p>AfrykaCoffee</p>
+            <p>Monsieur</p>
+            <p>Cocofli</p>
+            <p>Rozrusznik</p>
+            <p>PanatoCafe</p>
+        </div>
+        <div id="developerDetails" class="navigation details" >
+            <p>IBM_JuniorDeliverySecuritySpecialist</p>
+            <p>Nokia_SoftwareDeveloper</p>
+            <p>Teleste_SoftwareDeveloper</p>
+            <p>Silobreaker_FrontendDeveloper</p>
+            <p>Beeyay_FrontendDeveloper</p>
+        </div>
+    </div>
+    <div style="flex-basis:40%;border:1px solid #ECEFC1">
+        <p>## Title: WIP</p>
+        <p>## Period: WIP</p>
+        <p>## Description: WIP</p>
+    </div>
+<p style="position:absolute;bottom:32px;left:32px;">krekosiewicz.consultant@gmail.com</p>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Assuming you have elements to toggle for each directory, you'll need to set them up similarly
