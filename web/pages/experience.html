@@ -4,47 +4,32 @@
     <meta charset="UTF-8">
     <title>Experience</title>
     <link rel="stylesheet" href="../global.css">
+    <style>
+        .paver-details, .pizzerman-details, .barista-details, .developer-details {
+            display: none;
+        }
+    </style>
+    <script src="../scripts/toggle.js"></script>
+
 </head>
 <body>
-<p><a href="../">back</a></p>
-<p>exp exp</p>
-
-<button onclick="fetchRandomFile()">Fetch Random File</button>
-<p id="fileContent">Press the button to fetch content.</p>
-
+<p style="margin-bottom:16px;"><a href="../">back</a></p>
+<div class="navigation">
+    <p id="togglePaver" class="directory" style="padding-right:32px;">paver</p>
+    <p id="togglePizzerman" class="directory" style="padding-right:32px;">pizzerman</p>
+    <p id="toggleBarista" class="directory" style="padding-right:32px;">barista</p>
+    <p id="toggleDeveloper" class="directory" style="padding-right:32px;">software develeper</p>
+</div>
+<p id="paverDetails" class="paver-details">Paver-Fibra</p>
+<p id="pizzermanDetails" class="pizzerman-details">20222</p>
 <script>
-    async function fetchRandomFile() {
-        const repo = 'krekosiewicz/SeoDevAudit'; // Replace with your repo path
-        const path = ''; // Use a subpath if you want to fetch from a specific directory inside the repo
-        const url = `https://api.github.com/repos/${repo}/contents/${path}`;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const files = await response.json();
-            const randomFile = files[Math.floor(Math.random() * files.length)];
-
-            // Assuming we want to fetch non-directory files only
-            if (randomFile.type !== 'file') {
-                document.getElementById('fileContent').innerText = 'Randomly selected item is not a file.';
-                return;
-            }
-
-            // Fetching content of the random file
-            const fileResponse = await fetch(randomFile.download_url);
-            if (!fileResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const content = await fileResponse.text(); // or .json() if it's a JSON file
-
-            document.getElementById('fileContent').innerText = content;
-        } catch (error) {
-            console.error('Failed to fetch random file:', error);
-            document.getElementById('fileContent').innerText = 'Failed to fetch file.';
-        }
-    }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Assuming you have elements to toggle for each directory, you'll need to set them up similarly
+        setupToggle('togglePaver', 'paverDetails', 'flex');
+        setupToggle('togglePizzerman', 'pizzermanDetails', 'flex');
+        setupToggle('toggleBarista', 'baristaDetails', 'flex');
+        setupToggle('toggleDeveloper', 'developerDetails', 'flex');
+    });
 </script>
 </body>
 </html>

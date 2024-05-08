@@ -10,6 +10,7 @@
             .social-links > * { padding-right: 32px }
         </style>
         <script src="config.js"></script>
+        <script src="scripts/toggle.js"></script>
 
     </head>
     <body>
@@ -28,20 +29,15 @@
 
 
         <script>
-            document.getElementById('instagramLink').innerHTML = `<a href="${config.instagramUrl}">instagram</a>`;
-            document.getElementById('linkedinLink').innerHTML = `<a href="${config.linkedinUrl}">linkedin</a>`;
-            document.getElementById('lichessLink').innerHTML = `<a href="${config.lichessUrl}">lichess</a>`;
-            document.getElementById('githubLink').innerHTML = `<a href="${config.githubUrl}">github</a>`;
-        </script>
-        <script>
-            document.getElementById('socialToggle').onclick = function() {
-                var socialLinks = document.getElementById('socialLinks');
-                if (socialLinks.style.display === 'flex') {
-                    socialLinks.style.display = 'none';
-                } else {
-                    socialLinks.style.display = 'flex';
-                }
-            };
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('instagramLink').innerHTML = `<a href="${config.instagramUrl}">instagram</a>`;
+                document.getElementById('linkedinLink').innerHTML = `<a href="${config.linkedinUrl}">linkedin</a>`;
+                document.getElementById('lichessLink').innerHTML = `<a href="${config.lichessUrl}">lichess</a>`;
+                document.getElementById('githubLink').innerHTML = `<a href="${config.githubUrl}">github</a>`;
+
+                // Set up toggle for social links
+                setupToggle('socialToggle', 'socialLinks', 'flex');
+            });
         </script>
     </body>
 </html>

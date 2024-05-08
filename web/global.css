@@ -5,16 +5,20 @@
     src: url('fonts/Hack-Bold.ttf') format('truetype');
 }
 
+html {
+    overflow: hidden;
+}
+
 html, body {
     background-color: #0A1E24;
     color: #ECEFC1;
     height: 100%;
     margin: 0;
-    overflow: hidden;
     font-family: 'Hack', monospace;
 }
 
 body {
+    overflow: auto;
     padding: 32px;
 }
 
