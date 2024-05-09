@@ -5,27 +5,44 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Kacper Website</title>
         <link rel="stylesheet" href="global.css">
-        <style>
-            .social-links { display: none; }
-            .social-links > * { padding-right: 32px }
-        </style>
         <script src="config.js"></script>
         <script src="scripts/toggle.js"></script>
-
+        <script src="scripts/music-controls.js" defer></script>
     </head>
     <body>
-        <p><a href="pages/face.html">face</a></p>
-        <p><a href="pages/bio.html">bio</a></p>
-        <p><a href="pages/experience.html">experience</a></p>
-        <p><a href="pages/cv.html">cv</a></p>
-        <p id="socialToggle" class="directory">socials</p>
-        <div id="socialLinks" class="social-links">
-            <p id="instagramLink">instagram</p>
-            <p id="linkedinLink">linkedin</p>
-            <p id="lichessLink">lichess</p>
-            <p id="githubLink">lichess</p>
+        <div class="content">
+            <p><a href="pages/face.html">face</a></p>
+            <p><a href="pages/bio.html">bio</a></p>
+            <p><a href="pages/experience.html">experience</a></p>
+            <p><a href="pages/cv.html">cv</a></p>
+            <p><a href="pages/philosophy.html">philosophy</a></p>
+            <div style="display:flex;height:24px;margin:8px 0;align-items:center;">
+                <p id="musicToggle" class="directory">music</p>
+                <p id="playStopButton" class="soundLink" style="display:none;color:#E35A00;">&nbsp &nbsp stop</p> <!-- Initially hidden -->
+            </div>
+            <div id="musicLinks" class="subdirectory">
+                <p class="soundLink" data-src="music/burgery_z_sosem_z_suszonych_pomidorow_2018.wav">burger-z-sosem-z-suszonych-pomidorow_2018.wav</p>
+                <p class="soundLink" data-src="music/aa_15.06.2017.wav">aa_15.06.2017.wav</p>
+                <p class="soundLink" data-src="music/to musi starczyc-2019.wav">to musi starczyc-2019.wav</p>
+                <p class="soundLink" data-src="music/Ogien-2010.mp3">Ogien-2010.mp3</p>
+                <p class="soundLink" data-src="music/poezja-KD-piosenka-bez-nazwy-2015.wav">poezja-KD-piosenka-bez-nazwy-2015.wav</p>
+            </div>
+            <p id="gamesToggle" class="directory">games</p>
+            <div id="gamesLinks" class="subdirectory">
+                <p><a href="pages/snake.html">snake</a></p>
+            </div>
+            <p id="socialToggle" class="directory">socials</p>
+            <div id="socialLinks" class="subdirectory">
+                <p id="instagramLink">instagram</p>
+                <p id="linkedinLink">linkedin</p>
+                <p id="lichessLink">lichess</p>
+                <p id="githubLink">lichess</p>
+            </div>
         </div>
-        <p style="position:absolute;bottom:32px;left:32px;">krekosiewicz.consultant@gmail.com</p>
+        <div class="footer">
+            <p>If you’re looking for a developer who combines technical skill with creative problem-solving and teamwork, I would love to chat about how I can contribute to your next project!</p>
+            <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
+        </div>
 
 
         <script>
@@ -37,6 +54,8 @@
 
                 // Set up toggle for social links
                 setupToggle('socialToggle', 'socialLinks', 'flex');
+                setupToggle('musicToggle', 'musicLinks', 'flex');
+                setupToggle('gamesToggle', 'gamesLinks', 'flex');
             });
         </script>
     </body>

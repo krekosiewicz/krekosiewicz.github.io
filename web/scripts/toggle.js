@@ -2,7 +2,7 @@
 function setupToggle(toggleButtonId, contentId, displayStyle = 'flex') {
     const toggleButton = document.getElementById(toggleButtonId);
     const content = document.getElementById(contentId);
-    const allDetails = document.querySelectorAll('.details');
+    const allDetails = document.querySelectorAll('.subdirectory');
 
     toggleButton.addEventListener('click', function() {
         allDetails.forEach(detail => {
