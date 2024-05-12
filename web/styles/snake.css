@@ -6,9 +6,9 @@
 #gameBoard {
     border-radius: 100px;
     display: grid;
-    grid-template-columns: repeat(20, 24px);
-    grid-template-rows: repeat(20, 24px);
-    margin: 5px;
+    grid-template-columns: repeat(16, 24px);
+    grid-template-rows: repeat(16, 24px);
+    margin: 8px;
 }
 
 .gameContainer {

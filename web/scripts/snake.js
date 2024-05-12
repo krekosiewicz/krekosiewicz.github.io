@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const board = document.getElementById('gameBoard');
 
     let state = {
-        snake: [{ x: 8, y: 12 }],
-        food: { x: 5, y: 10 },
-        gridSize: 20,
-        direction: 'right',
+        snake: [{ x: 4, y: 8 }],
+        food: { x: 6, y: 2 },
+        gridSize: 16,
+        direction: 'up',
     };
 
     const draw = (state) => {
