@@ -1,0 +1,32 @@
+
+.snake {
+    background-color: #67A0CD;
+}
+
+#gameBoard {
+    border-radius: 100px;
+    display: grid;
+    grid-template-columns: repeat(20, 24px);
+    grid-template-rows: repeat(20, 24px);
+    margin: 5px;
+}
+
+.gameContainer {
+    border: #0E548B solid 32px;
+    border-radius: 16px;
+    box-shadow: inset 0 0 0 4px #0E548B;
+}
+
+
+.gameContainer {
+    background-color: #ECEFC1 ;
+}
+
+.snake {
+    border: #0A1E24 1px dotted;
+}
+
+.food {
+    background-color: #ECEFC1;
+    border: #E35A00 4px solid;
+}
