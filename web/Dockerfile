@@ -1,10 +1,10 @@
 FROM nginx:alpine
 
 # Remove default Nginx configuration
-#RUN rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy custom server configuration
-#COPY server.conf /etc/nginx/conf.d/
+COPY server.conf /etc/nginx/conf.d/
 
 # Copy static files
 COPY . /usr/share/nginx/html
