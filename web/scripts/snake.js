@@ -1,17 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
     const board = document.getElementById('gameBoard');
+    const scoreText = document.getElementById('score');
+    const highScoreText = document.getElementById('highScore');
+
 
     let state = {
         snake: [{ x: 4, y: 8 }],
         food: { x: 6, y: 2 },
         gridSize: 16,
         direction: 'up',
+        score: 0,
+        highScore: 0
     };
 
     const draw = (state) => {
         board.innerHTML = ''; // Clear the board
         state.snake.forEach(segment => drawSegment(segment, 'snake'));
         drawSegment(state.food, 'food');
+        scoreText.textContent = state.score.toString().padStart(3, '0');
+        highScoreText.textContent = state.highScore.toString().padStart(3, '0');
     };
 
     const drawSegment = (segment, className) => {
