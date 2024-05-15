@@ -14,53 +14,129 @@
         }
     </style>
     <script src="../scripts/toggle.js"></script>
-<!--#06AFC7-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/2.0.1/remarkable.min.js"
+            integrity="sha512-skYYbQHAuOTpeJTthhUH3flZohep8blA+qjZOY0VqmfXMDiYcWxu29F5UbxU4LxaIpGkRBk+3Qf8qaXfd9jngg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+<!--    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline';">-->
 </head>
 <body style="display:flex;flex-direction: column">
-    <div style="flex-basis:40%">
-        <p style="margin-bottom:16px;"><a href="../">back</a></p>
-        <div class="navigation">
-            <p id="togglePaver" class="directory" style="padding-right:32px;">paver</p>
-            <p id="togglePizzerman" class="directory" style="padding-right:32px;">pizzerman</p>
-            <p id="toggleBarista" class="directory" style="padding-right:32px;">barista</p>
-            <p id="toggleDeveloper" class="directory" style="padding-right:32px;">software develeper</p>
-        </div>
-        <p id="paverDetails" class="subdirectory">Fibra_HelperOfPaver_2009-2010(summer)</p>
-        <p id="pizzermanDetails" class="subdirectory">PiekielnyKupiec_YoungerPizzerman_2010-2011(summer)</p>
-        <div id="baristaDetails" class="navigation subdirectory" >
-            <p>CoffeeHeaven</p>
-            <p>WBieguCafe</p>
-            <p>AfrykaCoffee</p>
-            <p>Monsieur</p>
-            <p>Cocofli</p>
-            <p>Rozrusznik</p>
-            <p>PanatoCafe</p>
-        </div>
-        <div id="developerDetails" class="navigation subdirectory" >
-            <p>IBM_JuniorDeliverySecuritySpecialist</p>
-            <p>Nokia_SoftwareDeveloper</p>
-            <p>Teleste_SoftwareDeveloper</p>
-            <p>Silobreaker_FrontendDeveloper</p>
-            <p>Beeyay_FrontendDeveloper</p>
-        </div>
+<div style="flex-basis:40%">
+    <p style="margin-bottom:16px;"><a href="../">back</a></p>
+    <div class="navigation">
+<!--        dynamic generated directories based on md -->
     </div>
-    <div style="flex-basis:40%;border:1px solid #ECEFC1">
-        <p>## Title: WIP</p>
-        <p>## Period: WIP</p>
-        <p>## Description: WIP</p>
+    <div class="navigationSubdirectories">
+        <!--    dynamic generated subdirectories based on md  -->
     </div>
-    <div class="footer">
-        <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
-    </div>
+</div>
+<div class="experienceBox" style="flex-basis:40%;border:1px solid #ECEFC1;padding:32px">
+    <p id="experienceCompany">Please select experience to see job details</p>
+    <p id="experienceTitle"></p>
+    <p id="experiencePeriod"></p>
+    <p id="experienceDescription"></p>
+</div>
+<div class="footer">
+    <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Assuming you have elements to toggle for each directory, you'll need to set them up similarly
-        setupToggle('togglePaver', 'paverDetails', 'flex');
-        setupToggle('togglePizzerman', 'pizzermanDetails', 'flex');
-        setupToggle('toggleBarista', 'baristaDetails', 'flex');
-        setupToggle('toggleDeveloper', 'developerDetails', 'flex');
+        const md = new remarkable.Remarkable();
+
+        function loadExperience(mdContent) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(mdContent, 'text/html');
+
+            // Navigation container and subdirectories
+            const navContainer = document.querySelector('.navigation');
+            const subdirectoryContainer = document.querySelector('.navigationSubdirectories');
+
+            // Clear existing content
+            navContainer.innerHTML = '';
+            subdirectoryContainer.innerHTML = '';
+
+            const toggleSetupData = [];
+
+            const sections = doc.querySelectorAll('h2');
+            sections.forEach(section => {
+                const sectionTitle = section.textContent.trim();
+                const sectionId = sectionTitle.replace(/\s+/g, '');
+                const sectionDetailsId = `${sectionId}Details`;
+
+                // Create navigation item for each section
+                const sectionNavItem = document.createElement('p');
+                sectionNavItem.id = `toggle${sectionId}`;
+                sectionNavItem.className = 'directory';
+                sectionNavItem.style.paddingRight = '32px';
+                sectionNavItem.textContent = sectionTitle;
+                navContainer.appendChild(sectionNavItem);
+
+                // Create subdirectory container
+                const subdirectory = document.createElement('div');
+                subdirectory.id = sectionDetailsId;
+                subdirectory.className = 'subdirectory';
+                subdirectoryContainer.appendChild(subdirectory);
+
+                // Get the list following the h2 for subdirectory items
+                let sibling = section.nextElementSibling;
+                while (sibling && sibling.tagName !== 'H2') {
+                    if (sibling.tagName === 'H3') {
+                        const expTitle = sibling.textContent.trim();
+                        const expDetails = sibling.nextElementSibling;
+
+                        const navItem = document.createElement('p');
+                        navItem.style.paddingRight = '32px';
+                        navItem.style.color = '#FF8A39';
+                        navItem.style.cursor = 'pointer';
+                        navItem.textContent = expTitle;
+                        navItem.addEventListener('click', () => {
+                            updateExperienceBox(expTitle, expDetails.innerHTML);
+                        });
+
+                        subdirectory.appendChild(navItem);
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+
+                // Collect data for dynamic toggle setup
+                toggleSetupData.push({ toggleButtonId: sectionNavItem.id, contentId: sectionDetailsId });
+            });
+
+            // Setup toggles after all elements are added to the DOM
+            setupToggles(toggleSetupData);
+        }
+
+        function setupToggles(toggleData) {
+            toggleData.forEach(({ toggleButtonId, contentId }) => {
+                setupToggle(toggleButtonId, contentId, 'flex');
+            });
+        }
+
+        function updateExperienceBox(title, detailsHTML) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(detailsHTML, 'text/html');
+
+            const company = doc.querySelector('li:nth-of-type(1)').textContent.replace('**Company:** ', '');
+            const title2 = doc.querySelector('li:nth-of-type(2)').textContent.replace('**Title:** ', '');
+            const period = doc.querySelector('li:nth-of-type(3)').textContent.replace('**Period:** ', '');
+            const description = doc.querySelector('li:nth-of-type(4)').textContent.replace('**Description:** ', '');
+
+            document.getElementById('experienceTitle').textContent = `${title2}`;
+            document.getElementById('experienceCompany').textContent = `${company}`;
+            document.getElementById('experiencePeriod').textContent = `${period}`;
+            document.getElementById('experienceDescription').textContent = `${description}`;
+        }
+
+        fetch('../data/experience.md')
+            .then(response => response.text())
+            .then(data => {
+                const parsedContent = md.render(data);
+                loadExperience(parsedContent);
+            })
+            .catch(error => console.error('Error fetching markdown:', error));
     });
 </script>
+
 </body>
 </html>
