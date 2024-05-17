@@ -3,14 +3,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const scoreText = document.getElementById('score');
     const highScoreText = document.getElementById('highScore');
 
-
     let state = {
         snake: [{ x: 4, y: 8 }],
         food: { x: 6, y: 2 },
         gridSize: 16,
         direction: 'up',
         score: 0,
-        highScore: 0
+        highScore: 0,
+        gameInterval: null,
+        gameActive: false // Add a flag to track game status
     };
 
     const draw = (state) => {
@@ -64,7 +65,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (checkCollision(head, newSnake)) {
             alert('Game Over!');
-            state = { ...state, snake: [{ x: 8, y: 12 }], food: randomPosition(), score: 0 };
+            clearInterval(state.gameInterval); // Stop the game loop
+            state = {
+                ...state,
+                snake: [{ x: 4, y: 8 }],
+                food: randomPosition(),
+                score: 0,
+                gameActive: false, // Set gameActive to false
+                direction: 'up'
+            };
         } else {
             state = { ...state, snake: newSnake, food: newFood, score: newScore, highScore: Math.max(newScore, state.highScore) };
         }
@@ -77,8 +86,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (directionMap[event.key] && ['up', 'down'].includes(state.direction) !== ['up', 'down'].includes(directionMap[event.key])) {
             state = { ...state, direction: directionMap[event.key] };
         }
-        if (!state.gameInterval && event.key === ' ') {
+        if (event.key === ' ' && !state.gameActive) { // Start the game on spacebar press if game is not active
             state.gameInterval = setInterval(gameLoop, 200);
+            state.gameActive = true; // Set gameActive to true
         }
     });
 
