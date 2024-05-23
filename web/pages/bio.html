@@ -5,7 +5,6 @@
     <title>Bio</title>
     <link rel="stylesheet" href="../global.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../config.js"></script>
 </head>
 <body>
 <div style="display:flex;flex-direction:column;padding-bottom:64px;">
@@ -20,12 +19,15 @@
     <p style="padding-bottom:32px;">When I’m not programming, I'm producing music, playing chess (with enthusiasm, but not skill), and brewing more coffee than one person should drink. I also enjoy relaxing in the sauna and spending time with my two cats.</p>
 
     <p>## What's new</p>
-    <p style="padding-bottom:32px;">Currently, I’m excited to be exploring the Astro, learning about the potential of LLMs, and continuing SEO studies</p>
-</div>
-
-<div class="footer">
-    <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
+    <p style="padding-bottom:32px;">Currently, I’m excited to be exploring Astro, pretending to be devops, learning about the potential of LLMs, and continuing SEO studies</p>
 </div>
 
 </body>
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.appendChild(createFooter('simple'));
+    });
+</script>
 </html>

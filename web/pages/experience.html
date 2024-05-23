@@ -13,7 +13,6 @@
             display: none;
         }
     </style>
-    <script src="../scripts/toggle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/2.0.1/remarkable.min.js"
             integrity="sha512-skYYbQHAuOTpeJTthhUH3flZohep8blA+qjZOY0VqmfXMDiYcWxu29F5UbxU4LxaIpGkRBk+3Qf8qaXfd9jngg=="
             crossorigin="anonymous"
@@ -36,11 +35,11 @@
     <p id="experiencePeriod"></p>
     <p id="experienceDescription"></p>
 </div>
-<div class="footer">
-    <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
-</div>
 
-<script>
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+    import { setupToggle } from '../scripts/toggle.js';
+
     document.addEventListener('DOMContentLoaded', function() {
         const md = new remarkable.Remarkable();
 
@@ -87,7 +86,7 @@
 
                         const navItem = document.createElement('p');
                         navItem.style.paddingRight = '32px';
-                        navItem.style.color = '#FF8A39';
+                        navItem.style.color = '#FEFFF0';
                         navItem.style.cursor = 'pointer';
                         navItem.textContent = expTitle;
                         navItem.addEventListener('click', () => {
@@ -135,6 +134,7 @@
                 loadExperience(parsedContent);
             })
             .catch(error => console.error('Error fetching markdown:', error));
+        document.body.appendChild(createFooter());
     });
 </script>
 

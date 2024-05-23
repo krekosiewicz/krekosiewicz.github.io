@@ -1,5 +1,5 @@
 // toggle.js
-function setupToggle(toggleButtonId, contentId, displayStyle = 'flex') {
+export const setupToggle = (toggleButtonId, contentId, displayStyle = 'flex') => {
     const toggleButton = document.getElementById(toggleButtonId);
     const content = document.getElementById(contentId);
     const allDetails = document.querySelectorAll('.subdirectory');

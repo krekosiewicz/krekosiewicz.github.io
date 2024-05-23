@@ -20,10 +20,12 @@
         <p style="padding-bottom:32px"><span style="color:#E35A00">Perfectionism is a source of suffering.</span> Perfectionism is a block to creativity and a killer of great ideas. Through this website, I confront perfectionism and my own sense of discomfort.</p>
         <p>And at the same time, I have a lot of fun with it. :)</p>
     </div>
-
-
-    <div class="footer">
-        <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
-    </div>
 </body>
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.appendChild(createFooter('simple'));
+    });
+</script>
 </html>

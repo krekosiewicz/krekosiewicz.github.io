@@ -9,8 +9,12 @@
 <body>
 <p style="margin-bottom:16px;"><a href="../">back</a></p>
 <img src="../data/KacperDev.png" alt="Frontend Developer" style="width:500px;max-width:100%;">
-<div class="footer">
-    <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
-</div>
 </body>
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.appendChild(createFooter('simple'));
+    });
+</script>
 </html>

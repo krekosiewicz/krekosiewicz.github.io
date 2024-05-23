@@ -7,4 +7,11 @@
 <body>
 
 </body>
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.appendChild(createFooter('simple'));
+    });
+</script>
 </html>

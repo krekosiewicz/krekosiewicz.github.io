@@ -19,8 +19,12 @@
             <p><a href="../data/cv.pdf" download="krekosiewicz.cv.pdf">download</a></p>
         </div>
         <iframe src="../data/cv.pdf#toolbar=0&view=FitH"></iframe>
-        <div class="footer">
-            <p style="word-wrap:break-word;">krekosiewicz.consultant@gmail.com</p>
-        </div>
 </body>
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.appendChild(createFooter('simple'));
+    });
+</script>
 </html>

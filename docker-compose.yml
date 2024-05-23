@@ -6,6 +6,6 @@ services:
       context: ./web
       dockerfile: Dockerfile
     env_file:
-      - .env
+      - .envKR
     ports:
       - "3000:80"
