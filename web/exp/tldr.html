@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Experience - Tl;dr</title>
+    <link rel="stylesheet" href="../global.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .navigation > * {
+            padding-right: 32px;
+        }
+        .details {
+            display: none;
+        }
+        .color-I {
+            color: #E35A00; /* Red */
+        }
+        .color-II {
+            color: #FF8A39; /* Orange */
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/2.0.1/remarkable.min.js"
+            integrity="sha512-skYYbQHAuOTpeJTthhUH3flZohep8blA+qjZOY0VqmfXMDiYcWxu29F5UbxU4LxaIpGkRBk+3Qf8qaXfd9jngg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+</head>
+<body style="display:flex;flex-direction: column">
+<div style="flex-basis:40%">
+    <p style="margin-bottom:16px;"><a href="../">back</a></p>
+    <div style="display:flex;">
+        <div class="navigation">
+            <!--        dynamic generated directories based on md, ignore -->
+        </div>
+        <p id="tldr" style="color:#E35A00; cursor: pointer;">tl;dr (tech stack)</p>
+    </div>
+    <div class="navigationSubdirectories">
+        <!--    dynamic generated subdirectories based on md, ignore  -->
+    </div>
+</div>
+<div class="experienceBox" style="flex-basis:60%;overflow:auto;border:1px solid #ECEFC1;padding:32px;margin:16px 0;">
+    <p id="experienceCompany">Please select experience to see job details</p>
+    <p id="experienceTitle"></p>
+    <p id="experiencePeriod"></p>
+    <p id="experienceDescription"></p>
+</div>
+
+<script type="module">
+    import { createFooter } from '../components/footer.js';
+    import { setupToggle } from '../scripts/toggle.js';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const md = new remarkable.Remarkable();
+
+        // Extend Remarkable to handle custom styles
+        md.renderer.rules.text = function(tokens, idx) {
+            const token = tokens[idx];
+            const content = token.content;
+            return content.replace(/{color-(I|II|III)}\s*([^}]+)/g, (match, p1, p2) => {
+                return `<span class="color-${p1}">${p2}</span>`;
+            });
+        };
+
+        function loadExperience(mdContent) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(mdContent, 'text/html');
+
+            // Navigation container and subdirectories
+            const navContainer = document.querySelector('.navigation');
+            const subdirectoryContainer = document.querySelector('.navigationSubdirectories');
+
+            // Clear existing content
+            navContainer.innerHTML = '';
+            subdirectoryContainer.innerHTML = '';
+
+            const toggleSetupData = [];
+
+            const sections = doc.querySelectorAll('h2');
+            sections.forEach(section => {
+                const sectionTitle = section.textContent.trim();
+                const sectionId = sectionTitle.replace(/\s+/g, '');
+                const sectionDetailsId = `${sectionId}Details`;
+
+                // Create navigation item for each section
+                const sectionNavItem = document.createElement('p');
+                sectionNavItem.id = `toggle${sectionId}`;
+                sectionNavItem.className = 'directory';
+                sectionNavItem.style.paddingRight = '32px';
+                sectionNavItem.textContent = sectionTitle;
+                navContainer.appendChild(sectionNavItem);
+
+                // Create subdirectory container
+                const subdirectory = document.createElement('div');
+                subdirectory.id = sectionDetailsId;
+                subdirectory.className = 'subdirectory';
+                subdirectoryContainer.appendChild(subdirectory);
+
+                // Get the list following the h2 for subdirectory items
+                let sibling = section.nextElementSibling;
+                while (sibling && sibling.tagName !== 'H2') {
+                    if (sibling.tagName === 'H3') {
+                        const expTitle = sibling.textContent.trim();
+                        const expDetails = sibling.nextElementSibling;
+
+                        const navItem = document.createElement('p');
+                        navItem.style.paddingRight = '32px';
+                        navItem.style.color = '#FEFFF0';
+                        navItem.style.cursor = 'pointer';
+                        navItem.textContent = expTitle;
+                        navItem.addEventListener('click', () => {
+                            updateExperienceBox(expTitle, expDetails.innerHTML);
+                        });
+
+                        subdirectory.appendChild(navItem);
+                    }
+                    sibling = sibling.nextElementSibling;
+                }
+
+                // Collect data for dynamic toggle setup
+                toggleSetupData.push({ toggleButtonId: sectionNavItem.id, contentId: sectionDetailsId });
+            });
+
+            // Setup toggles after all elements are added to the DOM
+            setupToggles(toggleSetupData);
+        }
+
+        function setupToggles(toggleData) {
+            toggleData.forEach(({ toggleButtonId, contentId }) => {
+                setupToggle(toggleButtonId, contentId, 'flex');
+            });
+        }
+
+        function updateExperienceBox(title, detailsHTML) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(detailsHTML, 'text/html');
+
+            const company = doc.querySelector('li:nth-of-type(1)').textContent.replace('**Company:** ', '');
+            const title2 = doc.querySelector('li:nth-of-type(2)').textContent.replace('**Title:** ', '');
+            const period = doc.querySelector('li:nth-of-type(3)').textContent.replace('**Period:** ', '');
+            const description = doc.querySelector('li:nth-of-type(4)').textContent.replace('**Description:** ', '');
+
+            document.getElementById('experienceTitle').textContent = `${title2}`;
+            document.getElementById('experienceCompany').textContent = `${company}`;
+            document.getElementById('experiencePeriod').textContent = `${period}`;
+            document.getElementById('experienceDescription').textContent = `${description}`;
+        }
+
+        document.getElementById('tldr').addEventListener('click', function() {
+            fetch('../data/techstack.md')
+                .then(response => response.text())
+                .then(data => {
+                    const parsedContent = md.render(data);
+                    document.getElementById('experienceCompany').innerHTML = `
+                        <div>
+                            <p>[Work in progress]</p>
+                            <p style="font-size:12px;margin-bottom:16px">*If you're recruiter I believe this can help you find me a fitting project*</p>
+                        </div>`;
+                    document.getElementById('experienceTitle').innerHTML = `
+                        <div>
+                            <p style="color:#E35A00;font-size:14px">red color (I): I feel strong at the moment</p>
+                            <p style="color:#FF8A39;font-size:14px">orange color (II): I felt strong in the past</p>
+                            <p style="font-size:14px;margin-bottom:16px">default color (III): I worked with in the past</p>
+                        </div>`;
+                    document.getElementById('experiencePeriod').innerHTML = parsedContent;
+                    document.getElementById('experienceDescription').innerHTML = "";
+                })
+                .catch(error => console.error('Error fetching markdown:', error));
+        });
+
+        fetch('../data/experience.md')
+            .then(response => response.text())
+            .then(data => {
+                const parsedContent = md.render(data);
+                loadExperience(parsedContent);
+            })
+            .catch(error => console.error('Error fetching markdown:', error));
+
+        document.body.appendChild(createFooter());
+        document.getElementById('tldr').click();
+
+    });
+</script>
+
+</body>
+</html>
+
