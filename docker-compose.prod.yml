@@ -6,7 +6,7 @@ services:
       context: ./web
       dockerfile: Dockerfile
     env_file:
-      - .envKR
+      - .env
     ports:
       - "3000:80"
 
@@ -15,6 +15,7 @@ services:
       context: ./host/prod
       args:
         - DOMAIN_NAME=${DOMAIN_NAME}
+        - MMLK=${MMLK}
     ports:
       - "${HTTP_PORT}:80"
       - "${HTTPS_PORT}:443"
