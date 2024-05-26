@@ -5,6 +5,7 @@
     <title>Space Invaders</title>
     <link rel="stylesheet" href="../global.css">
     <link rel="stylesheet" href="../styles/spaceInvaders.css" />
+    <link rel="stylesheet" href="../styles/virtualKeyboard.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -19,14 +20,13 @@
         <div class="gameContainer" id="gameContainer">
             <div class="player"></div>
         </div>
-        <div style="display:flex; justify-content: space-between;margin-bottom:16px">
+        <div style="display:flex; justify-content: space-between;">
             <p>Score: <span id="score">0</span></p>
             <p>High Score: <span id="highScore">0</span></p>
         </div>
     </div>
     <div id="virtualKeyboardSpace" class="virtualKeyboardSpace"></div>
 </div>
-</body>
 <script type="module">
     import { createFooter } from '../components/footer.js';
     import { initGame } from '../scripts/spaceInvaders.js';
@@ -37,7 +37,7 @@
         const gameContainer = document.getElementById('gameContainer');
         const virtualKeyboardSpace = document.getElementById('virtualKeyboardSpace');
         const viewportHeight = window.innerHeight;
-        const keyboardHeight = 124; // Height for the virtual keyboard space
+        const keyboardHeight = 100; // Height for the virtual keyboard space
         const containerHeight = viewportHeight - keyboardHeight - 302; // Leave some space for padding and other elements
 
         gameContainer.style.height = `${containerHeight}px`;
@@ -56,4 +56,9 @@
         initGame(config);
     });
 </script>
+<script type="module">
+    import { initVirtualKeyboard } from '../scripts/virtualKeyboard.js';
+    initVirtualKeyboard();
+</script>
+</body>
 </html>

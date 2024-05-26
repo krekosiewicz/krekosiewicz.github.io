@@ -7,7 +7,7 @@ body {
 .gameContainer {
     position: relative;
     width: 100%;
-    margin: 16px auto;
+    margin: 32px auto;
     border: 2px solid white;
     background-color: #000;
     box-sizing: border-box;
@@ -33,11 +33,6 @@ body {
     background-color: blue;
 }
 
-.virtualKeyboardSpace {
-    width: 100%;
-    background-color: #333; /* Placeholder color for the virtual keyboard space */
-}
-
 .startMessage {
     position: absolute;
     top: 0;
@@ -51,3 +46,4 @@ body {
     color: white;
     z-index: 10;
 }
+
