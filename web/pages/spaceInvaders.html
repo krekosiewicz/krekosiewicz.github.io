@@ -12,8 +12,10 @@
     <div style="margin-bottom:16px;" class="navigation">
         <p style="margin-right:16px;"><a href="../">back</a></p>
     </div>
-    <div style="width:800px;margin:0 auto;">
-        <div class="game-container">
+    <div style="width:calc(100% - 32px);max-width:800px;margin:0 auto;">
+        WIP
+        <p>Press spacebar to start</p>
+        <div class="gameContainer" id="gameContainer">
             <div class="player"></div>
         </div>
         <div style="display:flex; justify-content: space-between;">
@@ -29,7 +31,18 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(createFooter('simple'));
-        initGame();
+        const gameContainer = document.getElementById('gameContainer');
+        const config = {
+            containerWidth: gameContainer.clientWidth,
+            containerHeight: gameContainer.clientHeight,
+            playerSize: 48,
+            bulletSize: { width: 4, height: 16 },
+            enemySize: 32,
+            playerSpeed: 10,
+            bulletSpeed: 5,
+            enemySpeed: 2
+        };
+        initGame(config);
     });
 </script>
 </html>
