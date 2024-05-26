@@ -1,0 +1,10 @@
+:root {
+    --terminal-background: #0A1E24;
+    --font-color: #ECEFC1;
+    --link-color: #67A0CD;
+    --directory-color: #FF8A39;
+    --wav-color: #ADCAB8;
+    --important-color: #E35A00;
+
+    --baseline: 16px;
+}

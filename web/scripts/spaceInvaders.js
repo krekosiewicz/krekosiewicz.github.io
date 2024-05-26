@@ -24,6 +24,10 @@ class Player {
     updatePosition() {
         this.element.style.left = `${this.position}px`;
     }
+
+    getBoundingBox() {
+        return this.element.getBoundingClientRect();
+    }
 }
 
 class Bullet {
@@ -176,21 +180,36 @@ class Game {
                 }
             });
         });
+
+        // Check for collisions between enemies and the player
+        this.enemies.forEach(enemy => {
+            if (this.checkCollision(enemy, this.player)) {
+                this.gameOver();
+            }
+        });
     }
 
-    checkCollision(bullet, enemy) {
-        const bulletRect = bullet.getBoundingBox();
-        const enemyRect = enemy.getBoundingBox();
+    checkCollision(obj1, obj2) {
+        const rect1 = obj1.getBoundingBox();
+        const rect2 = obj2.getBoundingBox();
         return (
-            bulletRect.left < enemyRect.right &&
-            bulletRect.right > enemyRect.left &&
-            bulletRect.top < enemyRect.bottom &&
-            bulletRect.bottom > enemyRect.top
+            rect1.left < rect2.right &&
+            rect1.right > rect2.left &&
+            rect1.top < rect2.bottom &&
+            rect1.bottom > rect2.top
         );
     }
 
     checkGameOver() {
         return this.enemies.some(enemy => enemy.position.top >= this.config.containerHeight - this.config.enemySize);
+    }
+
+    gameOver() {
+        alert('Game Over! Press space to start again.');
+        clearInterval(this.gameInterval);
+        clearInterval(this.enemySpawnInterval);
+        this.gameActive = false;
+        this.startMessage.style.display = 'flex';
     }
 }
 
