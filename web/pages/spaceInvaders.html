@@ -17,7 +17,7 @@
         <div class="startMessage" id="startMessage">
             <p>Press spacebar to start</p>
         </div>
-        <div class="gameContainer" id="gameContainer">
+        <div class="spaceInvadersContainer" id="spaceInvadersContainer">
             <div class="player"></div>
         </div>
         <div style="display:flex; justify-content: space-between;">
@@ -34,7 +34,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(createFooter('simple'));
 
-        const gameContainer = document.getElementById('gameContainer');
+        const gameContainer = document.getElementById('spaceInvadersContainer');
         const virtualKeyboardSpace = document.getElementById('virtualKeyboardSpace');
         const viewportHeight = window.innerHeight;
         const keyboardHeight = 100; // Height for the virtual keyboard space

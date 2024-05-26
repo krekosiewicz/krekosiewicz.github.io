@@ -1,159 +1,155 @@
 export function initGame(config) {
-    const gameContainer = document.querySelector('.gameContainer');
+    const gameContainer = document.querySelector('.spaceInvadersContainer');
     const startMessage = document.getElementById('startMessage');
-    let player = document.querySelector('.player');
     const scoreDisplay = document.getElementById('score');
     const highScoreDisplay = document.getElementById('highScore');
 
-    const { containerWidth, containerHeight, playerSize, bulletSize, enemySize, playerSpeed, bulletSpeed, enemySpeed } = config;
+    let state = {
+        playerPosition: config.containerWidth / 2 - config.playerSize / 2,
+        bullets: [],
+        enemies: [],
+        score: 0,
+        highScore: 0,
+        gameActive: false,
+        gameInterval: null
+    };
 
-    let playerPosition = containerWidth / 2 - playerSize / 2;
-    let score = 0;
-    let highScore = 0;
-    let gameActive = false;
-    let gameInterval;
+    const updateScore = (state) => {
+        scoreDisplay.textContent = state.score;
+        highScoreDisplay.textContent = state.highScore;
+    };
 
-    function updateScore() {
-        scoreDisplay.textContent = score;
-        highScoreDisplay.textContent = highScore;
-    }
-
-    function movePlayer(event) {
-        if (event.key === 'ArrowLeft' && playerPosition > 0) {
-            playerPosition -= playerSpeed;
-        } else if (event.key === 'ArrowRight' && playerPosition < containerWidth - playerSize) {
-            playerPosition += playerSpeed;
+    const movePlayer = (state, direction) => {
+        let newPlayerPosition = state.playerPosition;
+        if (direction === 'left' && newPlayerPosition > 0) {
+            newPlayerPosition -= config.playerSpeed;
+        } else if (direction === 'right' && newPlayerPosition < config.containerWidth - config.playerSize) {
+            newPlayerPosition += config.playerSpeed;
         }
-        player.style.left = `${playerPosition}px`;
-    }
+        return { ...state, playerPosition: newPlayerPosition };
+    };
 
-    function shoot() {
-        const bullet = document.createElement('div');
-        bullet.classList.add('bullet');
-        bullet.style.width = `${bulletSize.width}px`;
-        bullet.style.height = `${bulletSize.height}px`;
-        bullet.style.left = `${playerPosition + playerSize / 2 - bulletSize.width / 2}px`;
-        bullet.style.bottom = '70px';
-        gameContainer.appendChild(bullet);
+    const shoot = (state) => {
+        const bullet = {
+            left: state.playerPosition + config.playerSize / 2 - config.bulletSize.width / 2,
+            bottom: 70
+        };
+        return { ...state, bullets: [...state.bullets, bullet] };
+    };
 
-        const bulletInterval = setInterval(() => {
-            const bulletPosition = parseInt(bullet.style.bottom);
-            if (bulletPosition > containerHeight) {
-                bullet.remove();
-                clearInterval(bulletInterval);
-            } else {
-                bullet.style.bottom = `${bulletPosition + bulletSpeed}px`;
-                checkCollision(bullet, bulletInterval);
+    const createEnemy = (state) => {
+        const enemy = {
+            left: Math.random() * (config.containerWidth - config.enemySize),
+            top: 0
+        };
+        return { ...state, enemies: [...state.enemies, enemy] };
+    };
+
+    const updateBullets = (bullets) => {
+        return bullets.map(bullet => ({ ...bullet, bottom: bullet.bottom + config.bulletSpeed }))
+            .filter(bullet => bullet.bottom <= config.containerHeight);
+    };
+
+    const updateEnemies = (enemies) => {
+        return enemies.map(enemy => ({ ...enemy, top: enemy.top + config.enemySpeed }))
+            .filter(enemy => enemy.top <= config.containerHeight);
+    };
+
+    const checkCollision = (bullet, enemy) => {
+        const bulletRect = { left: bullet.left, right: bullet.left + config.bulletSize.width, top: bullet.bottom, bottom: bullet.bottom + config.bulletSize.height };
+        const enemyRect = { left: enemy.left, right: enemy.left + config.enemySize, top: enemy.top, bottom: enemy.top + config.enemySize };
+        return bulletRect.left < enemyRect.right && bulletRect.right > enemyRect.left && bulletRect.top < enemyRect.bottom && bulletRect.bottom > enemyRect.top;
+    };
+
+    const handleCollisions = (state) => {
+        let newBullets = [...state.bullets];
+        let newEnemies = [...state.enemies];
+        let newScore = state.score;
+
+        for (let bullet of state.bullets) {
+            for (let enemy of state.enemies) {
+                if (checkCollision(bullet, enemy)) {
+                    newBullets = newBullets.filter(b => b !== bullet);
+                    newEnemies = newEnemies.filter(e => e !== enemy);
+                    newScore += 10;
+                }
             }
-        }, 20);
-    }
+        }
 
-    function createEnemy() {
-        const enemy = document.createElement('div');
-        enemy.classList.add('enemy');
-        enemy.style.width = `${enemySize}px`;
-        enemy.style.height = `${enemySize}px`;
-        enemy.style.left = `${Math.random() * (containerWidth - enemySize)}px`;
-        enemy.style.top = '0px';
-        gameContainer.appendChild(enemy);
+        return { ...state, bullets: newBullets, enemies: newEnemies, score: newScore, highScore: Math.max(state.highScore, newScore) };
+    };
 
-        const enemyInterval = setInterval(() => {
-            const enemyPosition = parseInt(enemy.style.top);
-            if (enemyPosition > containerHeight - enemySize) {
-                enemy.remove();
-                clearInterval(enemyInterval);
-                gameOver();
-            } else if (checkEnemyCollisionWithPlayer(enemy)) {
-                enemy.remove();
-                clearInterval(enemyInterval);
-                gameOver();
-            } else {
-                enemy.style.top = `${enemyPosition + enemySpeed}px`;
+    const checkGameOver = (state) => {
+        for (let enemy of state.enemies) {
+            if (enemy.top >= config.containerHeight - config.enemySize) {
+                return true;
             }
-        }, 20);
+        }
+        return false;
+    };
 
-        enemy.dataset.interval = enemyInterval;
-    }
+    const draw = (state) => {
+        gameContainer.innerHTML = '';
+        const player = document.createElement('div');
+        player.className = 'player';
+        player.style.width = `${config.playerSize}px`;
+        player.style.height = `${config.playerSize}px`;
+        player.style.left = `${state.playerPosition}px`;
+        gameContainer.appendChild(player);
 
-    function checkCollision(bullet, bulletInterval) {
-        const enemies = document.querySelectorAll('.enemy');
-
-        enemies.forEach(enemy => {
-            const bulletRect = bullet.getBoundingClientRect();
-            const enemyRect = enemy.getBoundingClientRect();
-            if (
-                bulletRect.left < enemyRect.left + enemyRect.width &&
-                bulletRect.left + bulletRect.width > enemyRect.left &&
-                bulletRect.top < enemyRect.top + enemyRect.height &&
-                bulletRect.top + bulletRect.height > enemyRect.top
-            ) {
-                bullet.remove();
-                enemy.remove();
-                clearInterval(bulletInterval);
-                clearInterval(enemy.dataset.interval);
-                score += 10;
-                highScore = Math.max(highScore, score);
-                updateScore();
-            }
+        state.bullets.forEach(bullet => {
+            const bulletElem = document.createElement('div');
+            bulletElem.className = 'bullet';
+            bulletElem.style.width = `${config.bulletSize.width}px`;
+            bulletElem.style.height = `${config.bulletSize.height}px`;
+            bulletElem.style.left = `${bullet.left}px`;
+            bulletElem.style.bottom = `${bullet.bottom}px`;
+            gameContainer.appendChild(bulletElem);
         });
-    }
 
-    function checkEnemyCollisionWithPlayer(enemy) {
-        const playerRect = player.getBoundingClientRect();
-        const enemyRect = enemy.getBoundingClientRect();
-
-        return (
-            playerRect.left < enemyRect.left + enemyRect.width &&
-            playerRect.left + playerRect.width > enemyRect.left &&
-            playerRect.top < enemyRect.top + enemyRect.height &&
-            playerRect.top + playerRect.height > enemyRect.top
-        );
-    }
-
-    function clearGameBoard() {
-        const enemies = document.querySelectorAll('.enemy');
-        const bullets = document.querySelectorAll('.bullet');
-        enemies.forEach(enemy => {
-            clearInterval(enemy.dataset.interval);
-            enemy.remove();
+        state.enemies.forEach(enemy => {
+            const enemyElem = document.createElement('div');
+            enemyElem.className = 'enemy';
+            enemyElem.style.width = `${config.enemySize}px`;
+            enemyElem.style.height = `${config.enemySize}px`;
+            enemyElem.style.left = `${enemy.left}px`;
+            enemyElem.style.top = `${enemy.top}px`;
+            gameContainer.appendChild(enemyElem);
         });
-        bullets.forEach(bullet => bullet.remove());
-    }
 
-    function gameOver() {
-        clearInterval(gameInterval);
-        gameActive = false;
-        clearGameBoard();
-        startMessage.style.display = 'flex';
-        alert('Game Over! Press space to start again.');
-    }
+        updateScore(state);
+    };
 
-    function startGame() {
-        score = 0;
-        updateScore();
-        gameContainer.innerHTML = '<div class="player"></div>';
-        player = document.querySelector('.player');
-        player.style.width = `${playerSize}px`;
-        player.style.height = `${playerSize}px`;
-        playerPosition = containerWidth / 2 - playerSize / 2;
-        player.style.left = `${playerPosition}px`;
-        gameActive = true;
-        gameInterval = setInterval(createEnemy, 2000);
-        startMessage.style.display = 'none';
-    }
+    const gameLoop = () => {
+        let newState = { ...state };
+        newState.bullets = updateBullets(state.bullets);
+        newState.enemies = updateEnemies(state.enemies);
+        newState = handleCollisions(newState);
+        if (checkGameOver(newState)) {
+            alert('Game Over! Press space to start again.');
+            clearInterval(state.gameInterval);
+            state = { ...state, gameActive: false, bullets: [], enemies: [], score: 0 };
+            startMessage.style.display = 'flex';
+        } else {
+            state = newState;
+            draw(state);
+        }
+    };
 
     document.addEventListener('keydown', (event) => {
-        if (gameActive) {
+        if (state.gameActive) {
             if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-                movePlayer(event);
+                state = movePlayer(state, event.key === 'ArrowLeft' ? 'left' : 'right');
             }
             if (event.key === ' ') {
-                shoot();
+                state = shoot(state);
             }
-        } else if (event.key === ' ' && !gameActive) {
-            startGame();
+        } else if (event.key === ' ' && !state.gameActive) {
+            state = { ...state, gameActive: true, gameInterval: setInterval(gameLoop, 1000 / 60) };
+            startMessage.style.display = 'none';
         }
     });
 
-    updateScore();  // Initialize the score display
+    startMessage.style.display = 'flex'; // Initial message display
+    draw(state); // Initial draw
 }
