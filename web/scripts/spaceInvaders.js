@@ -1,5 +1,6 @@
 export function initGame(config) {
     const gameContainer = document.querySelector('.gameContainer');
+    const startMessage = document.getElementById('startMessage');
     let player = document.querySelector('.player');
     const scoreDisplay = document.getElementById('score');
     const highScoreDisplay = document.getElementById('highScore');
@@ -123,6 +124,7 @@ export function initGame(config) {
         clearInterval(gameInterval);
         gameActive = false;
         clearGameBoard();
+        startMessage.style.display = 'flex';
         alert('Game Over! Press space to start again.');
     }
 
@@ -137,6 +139,7 @@ export function initGame(config) {
         player.style.left = `${playerPosition}px`;
         gameActive = true;
         gameInterval = setInterval(createEnemy, 2000);
+        startMessage.style.display = 'none';
     }
 
     document.addEventListener('keydown', (event) => {

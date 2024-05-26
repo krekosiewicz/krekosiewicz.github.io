@@ -12,17 +12,19 @@
     <div style="margin-bottom:16px;" class="navigation">
         <p style="margin-right:16px;"><a href="../">back</a></p>
     </div>
-    <div style="width:calc(100% - 32px);max-width:800px;margin:0 auto;">
-        WIP
-        <p>Press spacebar to start</p>
+    <div style="width:calc(100% - 32px);max-width:800px;margin:0 auto; position: relative;">
+        <div class="startMessage" id="startMessage">
+            <p>Press spacebar to start</p>
+        </div>
         <div class="gameContainer" id="gameContainer">
             <div class="player"></div>
         </div>
-        <div style="display:flex; justify-content: space-between;">
+        <div style="display:flex; justify-content: space-between;margin-bottom:16px">
             <p>Score: <span id="score">0</span></p>
             <p>High Score: <span id="highScore">0</span></p>
         </div>
     </div>
+    <div id="virtualKeyboardSpace" class="virtualKeyboardSpace"></div>
 </div>
 </body>
 <script type="module">
@@ -31,7 +33,16 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(createFooter('simple'));
+
         const gameContainer = document.getElementById('gameContainer');
+        const virtualKeyboardSpace = document.getElementById('virtualKeyboardSpace');
+        const viewportHeight = window.innerHeight;
+        const keyboardHeight = 124; // Height for the virtual keyboard space
+        const containerHeight = viewportHeight - keyboardHeight - 302; // Leave some space for padding and other elements
+
+        gameContainer.style.height = `${containerHeight}px`;
+        virtualKeyboardSpace.style.height = `${keyboardHeight}px`;
+
         const config = {
             containerWidth: gameContainer.clientWidth,
             containerHeight: gameContainer.clientHeight,
